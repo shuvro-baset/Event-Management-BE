@@ -20,13 +20,15 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
       await client.connect();
-      const database = client.db("eventManagement");
-      const usersCollection = database.collection("activities");
+      const database = client.db("event-management");
+      const activitiesCollection = database.collection("activities");
         
       // GET API
       app.get('/home', async (req, res) => {
-        
-        res.send("home page");
+        console.log("get url hitted...")
+        const cursor = activitiesCollection.find({})
+        const activities = await cursor.toArray();
+        res.send(activities);
     });
      
     } finally {
