@@ -22,6 +22,7 @@ async function run() {
       await client.connect();
       const database = client.db("event-management");
       const activitiesCollection = database.collection("activities");
+      const eventCollection = database.collection("events")
         
       // GET API
       app.get('/home', async (req, res) => {
@@ -43,12 +44,17 @@ async function run() {
     app.post('/add-activities/:id', async (req, res) => {
       const id = req.params.id;
       const newEvents = req.body
-      const eventCollection = database.collection("events")
       const result = await eventCollection.insertOne(newEvents)
       console.log('load activities: ', id, result);
       res.send(result);
     })
-     
+     // get single activities info
+    app.get('/my-events/', async (req, res) => {
+      const cursor = eventCollection.find({})
+        const events = await cursor.toArray();
+      console.log('load my events: ', events);
+      res.send(events);
+    })
     } finally {
     //   await client.close();
     }
