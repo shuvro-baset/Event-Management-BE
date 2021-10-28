@@ -30,6 +30,24 @@ async function run() {
         const activities = await cursor.toArray();
         res.send(activities);
     });
+
+    // get single activities info
+    app.get('/add-activities/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const activity = await activitiesCollection.findOne(query);
+      console.log('load activities: ', id, activity);
+      res.send(activity);
+    })
+    // get single activities info
+    app.post('/add-activities/:id', async (req, res) => {
+      const id = req.params.id;
+      const newEvents = req.body
+      const eventCollection = database.collection("events")
+      const result = await eventCollection.insertOne(newEvents)
+      console.log('load activities: ', id, result);
+      res.send(result);
+    })
      
     } finally {
     //   await client.close();
